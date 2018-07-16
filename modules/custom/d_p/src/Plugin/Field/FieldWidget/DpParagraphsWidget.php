@@ -310,33 +310,36 @@ class DpParagraphsWidget extends paragraphs\Plugin\Field\FieldWidget\InlineParag
         ];
 
         if ($this->settings['show_placeholders'] == 'yes') {
-          $place_holder_link = drupal_get_path(
-              'module',
-              $paragraphs_entity->bundle()
-            ) . '/placeholder.jpg';
-          $element['placeholder'] = [
-            '#type' => 'container',
-            '#weight' => -2000,
-            '#attributes' => [
-              'class' => [
-                'float-left',
+          $moduleHandler = \Drupal::service('module_handler');
+          if ($moduleHandler->moduleExists($paragraphs_entity->bundle())){
+            $place_holder_link = drupal_get_path(
+                'module',
+                $paragraphs_entity->bundle()
+              ) . '/placeholder.jpg';
+            $element['placeholder'] = [
+              '#type' => 'container',
+              '#weight' => -2000,
+              '#attributes' => [
+                'class' => [
+                  'float-left',
+                ],
               ],
-            ],
-          ];
+            ];
 
-          $title = '';
-          if ($paragraphs_entity->hasField('field_d_main_title')) {
-            $title = $paragraphs_entity->get('field_d_main_title');
-            $title = $title->getValue()[0]['value'];
+            $title = '';
+            if ($paragraphs_entity->hasField('field_d_main_title')) {
+              $title = $paragraphs_entity->get('field_d_main_title');
+              $title = $title->getValue()[0]['value'];
+            }
+            $img = '';
+            if (file_exists($place_holder_link)) {
+              $img = "<img class='paragraph-placeholder' src='/" . $place_holder_link . "'>";
+            }
+            $element['#attached']['library'][] = 'd_p/d_p_admin';
+            $element['top']['placeholder']['#prefix'] = '<div class="paragraph-info-wrapper">' . $img . '<h5>' . $title . '</h5>';
+            $element['top']['placeholder']['#prefix'] .= '<p>' . $this->t('Type:') . ' ' . $bundle_info['label'] . '</p>';
+            $element['top']['placeholder']['#suffix'] = '</div>';
           }
-          $img = '';
-          if (file_exists($place_holder_link)) {
-            $img = "<img class='paragraph-placeholder' src='/" . $place_holder_link . "'>";
-          }
-          $element['#attached']['library'][] = 'd_p/d_p_admin';
-          $element['top']['placeholder']['#prefix'] = '<div class="paragraph-info-wrapper">' . $img . '<h5>' . $title . '</h5>';
-          $element['top']['placeholder']['#prefix'] .= '<p>' . $this->t('Type:') . ' ' . $bundle_info['label'] . '</p>';
-          $element['top']['placeholder']['#suffix'] = '</div>';
         }
 
         $actions = [];

@@ -90,9 +90,81 @@ function droopler_install_tasks() {
       'display_name' => t('Add footer'),
       'type' => 'normal',
     ],
+    'droopler_module_configure_form' => [
+      'display_name' => t('Configure additional modules'),
+      'type' => 'form',
+      'function' => 'Drupal\droopler\Installer\Form\ModuleConfigureForm',
+    ],
+    'droopler_module_install' => [
+      'display_name' => t('Install additional modules'),
+      'type' => 'batch',
+    ],
   ];
 
   return $tasks;
+}
+
+/**
+ * Installs the droopler modules in a batch.
+ *
+ * @param array $install_state
+ *   The install state.
+ *
+ * @return array
+ *   A batch array to execute.
+ */
+function droopler_module_install(array &$install_state) {
+
+  $modules = $install_state['droopler_additional_modules'];
+
+  $batch = [];
+  if ($modules) {
+    $operations = [];
+    foreach ($modules as $module) {
+      $operations[] = [
+        '_droopler_install_module_batch',
+        [[$module], $module, $install_state['form_state_values']],
+      ];
+    }
+
+    $batch = [
+      'operations' => $operations,
+      'title' => t('Installing additional modules'),
+      'error_message' => t('The installation has encountered an error.'),
+    ];
+  }
+
+  return $batch;
+}
+
+/**
+ * Implements callback_batch_operation().
+ *
+ * Performs batch installation of modules.
+ */
+function _droopler_install_module_batch($module, $module_name, $form_values, &$context) {
+  set_time_limit(0);
+
+  $optionalModulesManager = \Drupal::service('plugin.manager.droopler.optional_modules');
+
+  try {
+    $definition = $optionalModulesManager->getDefinition($module_name);
+    if ($definition['type'] == 'module') {
+      \Drupal::service('module_installer')->install($module, TRUE);
+    }
+    elseif ($definition['type'] == 'theme') {
+      \Drupal::service('theme_installer')->install($module, TRUE);
+    }
+
+    $instance = $optionalModulesManager->createInstance($module_name);
+    $instance->submitForm($form_values);
+  }
+  catch (\Exception $e) {
+
+  }
+
+  $context['results'][] = $module;
+  $context['message'] = t('Installed %module_name modules.', ['%module_name' => $module_name]);
 }
 
 /**
@@ -169,4 +241,14 @@ function droopler_update_8102() {
   foreach ($configs as $config => $module) {
     _droopler_import_config($module, $config);
   }
+}
+
+/**
+ * Install checklist API module.
+ */
+function droopler_update_8103() {
+  $modules = [
+    'checklistapi',
+  ];
+  \Drupal::service('module_installer')->install($modules, TRUE);
 }

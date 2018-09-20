@@ -122,7 +122,7 @@ class ModuleConfigureForm extends ConfigFormBase {
       if (strpos($key, 'install_modules') !== FALSE && $value) {
         preg_match('/install_modules_(?P<name>\w+)/', $key, $values);
         $installModules[] = $values['name'];
-      }s
+      }
     }
 
     $buildInfo = $form_state->getBuildInfo();
@@ -143,9 +143,13 @@ class ModuleConfigureForm extends ConfigFormBase {
    *
    * @param array $form
    *   Form to add exclusions.
+   * @param array $provider
+   *   Provider info from annotations.
    */
-  private function addDependencies(array &$form, $provider) {
+  private function addDependencies(array &$form, array $provider) {
     $form['install_modules_' . $provider['id']]['#disabled'] = TRUE;
+    $form['install_modules_' . $provider['id']]['#title_display'] = FALSE;
+    $form['install_modules_' . $provider['id']]['#attributes']['class'][] = 'hidden';
     foreach ($provider['dependencies'] as $depency) {
       $form['install_modules_' . $provider['id']]['#states']['checked'][] = [
         'input[name="install_modules_' . $depency . '"]' => ['checked' => TRUE],
@@ -158,11 +162,13 @@ class ModuleConfigureForm extends ConfigFormBase {
    *
    * @param array $form
    *   Form to add exclusions.
+   * @param array $provider
+   *   Provider info from annotations.
    */
-  private function addExclusions(array &$form, $provider) {
+  private function addExclusions(array &$form, array $provider) {
     foreach ($provider['exclusions'] as $exclusion) {
-      $form['install_modules_' . $provider['id']]['#states']['checked'][] = [
-        'input[name="install_modules_' . $exclusion . '"]' => ['checked' => FALSE],
+      $form['install_modules_' . $provider['id']]['#states']['disabled'][] = [
+        'input[name="install_modules_' . $exclusion . '"]' => ['checked' => TRUE],
       ];
     }
   }

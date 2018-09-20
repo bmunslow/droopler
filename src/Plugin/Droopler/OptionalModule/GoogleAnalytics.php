@@ -16,6 +16,7 @@ use Drupal\Core\Url;
  *   exclusions = {
  *    "google_tag",
  *   },
+ *   standardlyEnabled = 1,
  * )
  */
 class GoogleAnalytics extends AbstractOptionalModule {

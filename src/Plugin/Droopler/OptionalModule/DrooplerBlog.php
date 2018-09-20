@@ -2,8 +2,6 @@
 
 namespace Drupal\droopler\Plugin\Droopler\OptionalModule;
 
-use Drupal\Core\Form\FormStateInterface;
-
 /**
  * Droopler blog.
  *

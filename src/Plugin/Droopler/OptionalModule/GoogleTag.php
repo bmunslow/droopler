@@ -15,6 +15,7 @@ use Drupal\Core\Form\FormStateInterface;
  *   exclusions = {
  *    "google_analytics",
  *   },
+ *   standardlyEnabled = 0,
  * )
  */
 class GoogleTag extends AbstractOptionalModule {

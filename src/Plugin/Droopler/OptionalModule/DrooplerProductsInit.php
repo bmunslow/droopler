@@ -3,16 +3,16 @@
 namespace Drupal\droopler\Plugin\Droopler\OptionalModule;
 
 /**
- * Droopler blog init.
+ * Droopler blog.
  *
  * @DrooplerOptionalModule(
- *   id = "d_blog_init",
- *   label = @Translation("Enable Blog init"),
+ *   id = "d_products_init",
+ *   label = @Translation("Enable Products init"),
  *   type = "module",
  *   dependencies = {
- *    "d_blog",
+ *    "d_products",
  *   },
  *   standardlyEnabled = 1,
  * )
  */
-class DrooplerBlogInit extends AbstractOptionalModule {}
+class DrooplerProductsInit extends AbstractOptionalModule {}

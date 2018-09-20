@@ -43,4 +43,18 @@ class DrooplerOptionalModule extends Plugin {
    */
   public $weight;
 
+  /**
+   * The array of plugin IDs to exclude.
+   *
+   * @var array
+   */
+  public $exclusions;
+
+  /**
+   * The array of dependent plugin IDs.
+   *
+   * @var array
+   */
+  public $dependencies;
+
 }

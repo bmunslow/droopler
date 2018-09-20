@@ -24,14 +24,14 @@ class OptionalModulesManager extends DefaultPluginManager {
    */
   public function __construct(\Traversable $namespaces, CacheBackendInterface $cache_backend, ModuleHandlerInterface $module_handler) {
     parent::__construct(
-      'Plugin/droopler/OptionalModule',
+      'Plugin/Droopler/OptionalModule',
       $namespaces,
       $module_handler,
       'Drupal\droopler\Plugin\Droopler\OptionalModule\AbstractOptionalModule',
       'Drupal\droopler\Annotation\DrooplerOptionalModule'
     );
-    $this->alterInfo('droopler_optional_module_info');
-    $this->setCacheBackend($cache_backend, 'droopler_optional_module_plugins');
+//    $this->alterInfo('droopler_optional_module_info');
+//    $this->setCacheBackend($cache_backend, 'droopler_optional_module_plugins');
 
   }
 

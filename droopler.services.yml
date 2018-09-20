@@ -1,0 +1,4 @@
+services:
+  plugin.manager.droopler.optional_modules:
+    class: Drupal\droopler\OptionalModulesManager
+    parent: default_plugin_manager

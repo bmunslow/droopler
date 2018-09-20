@@ -5,6 +5,8 @@ namespace Drupal\droopler\Installer\Form;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\droopler\OptionalModulesManager;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Provides the site configuration form.
@@ -62,7 +64,7 @@ class ModuleConfigureForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-
+    
     $form['description'] = [
       '#type' => 'item',
       '#markup' => $this->t('Keep calm. You can install all the modules later, too.'),
@@ -77,7 +79,6 @@ class ModuleConfigureForm extends ConfigFormBase {
     static::sortByWeights($providers);
 
     foreach ($providers as $provider) {
-
       $instance = $this->optionalModulesManager->createInstance($provider['id']);
 
       $form['install_modules_' . $provider['id']] = [
@@ -86,6 +87,13 @@ class ModuleConfigureForm extends ConfigFormBase {
         '#description' => isset($provider['description']) ? $provider['description'] : '',
         '#default_value' => isset($provider['standardlyEnabled']) ? $provider['standardlyEnabled'] : 0,
       ];
+
+      if (isset($provider['dependencies'])) {
+        $this->addDependencies($form, $provider);
+      }
+      if (isset($provider['exclusions'])) {
+        $this->addExclusions($form, $provider);
+      }
 
       $form = $instance->buildForm($form, $form_state);
 
@@ -114,7 +122,7 @@ class ModuleConfigureForm extends ConfigFormBase {
       if (strpos($key, 'install_modules') !== FALSE && $value) {
         preg_match('/install_modules_(?P<name>\w+)/', $key, $values);
         $installModules[] = $values['name'];
-      }
+      }s
     }
 
     $buildInfo = $form_state->getBuildInfo();
@@ -128,6 +136,35 @@ class ModuleConfigureForm extends ConfigFormBase {
 
     $form_state->setBuildInfo($buildInfo);
 
+  }
+
+  /**
+   * Adds dependencies from annotations, to make one optional module dependent on the another.
+   *
+   * @param array $form
+   *   Form to add exclusions.
+   */
+  private function addDependencies(array &$form, $provider) {
+    $form['install_modules_' . $provider['id']]['#disabled'] = TRUE;
+    foreach ($provider['dependencies'] as $depency) {
+      $form['install_modules_' . $provider['id']]['#states']['checked'][] = [
+        'input[name="install_modules_' . $depency . '"]' => ['checked' => TRUE],
+      ];
+    }
+  }
+
+  /**
+   * Adds exclusions from annotations, to prevent enabling conflicting modules.
+   *
+   * @param array $form
+   *   Form to add exclusions.
+   */
+  private function addExclusions(array &$form, $provider) {
+    foreach ($provider['exclusions'] as $exclusion) {
+      $form['install_modules_' . $provider['id']]['#states']['checked'][] = [
+        'input[name="install_modules_' . $exclusion . '"]' => ['checked' => FALSE],
+      ];
+    }
   }
 
   /**

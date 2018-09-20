@@ -8,11 +8,14 @@ use Drupal\Core\Url;
 /**
  * Google Analytics.
  *
- * @ThunderOptionalModule(
+ * @DrooplerOptionalModule(
  *   id = "google_analytics",
  *   label = @Translation("Google Analytics"),
  *   description = @Translation("Google Analytics lets you measure your advertising ROI as well as track your video, and social networking sites and applications."),
  *   type = "module",
+ *   exclusions = {
+ *    "google_tag",
+ *   },
  * )
  */
 class GoogleAnalytics extends AbstractOptionalModule {

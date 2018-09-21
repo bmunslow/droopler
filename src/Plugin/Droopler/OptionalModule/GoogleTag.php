@@ -34,7 +34,6 @@ class GoogleTag extends AbstractOptionalModule {
       '#attributes' => ['placeholder' => ['GTM-xxxxxx']],
       '#size' => 12,
       '#maxlength' => 15,
-      '#required' => TRUE,
     ];
 
     return $form;

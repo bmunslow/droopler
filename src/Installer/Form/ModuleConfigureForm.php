@@ -129,7 +129,7 @@ class ModuleConfigureForm extends ConfigFormBase {
 
     $install_state = $buildInfo['args'];
 
-    $install_state[0]['thunder_additional_modules'] = $installModules;
+    $install_state[0]['droopler_additional_modules'] = $installModules;
     $install_state[0]['form_state_values'] = $form_state->getValues();
 
     $buildInfo['args'] = $install_state;
@@ -150,9 +150,9 @@ class ModuleConfigureForm extends ConfigFormBase {
     $form['install_modules_' . $provider['id']]['#disabled'] = TRUE;
     $form['install_modules_' . $provider['id']]['#title_display'] = FALSE;
     $form['install_modules_' . $provider['id']]['#attributes']['class'][] = 'hidden';
-    foreach ($provider['dependencies'] as $depency) {
+    foreach ($provider['dependencies'] as $dependency) {
       $form['install_modules_' . $provider['id']]['#states']['checked'][] = [
-        'input[name="install_modules_' . $depency . '"]' => ['checked' => TRUE],
+        'input[name="install_modules_' . $dependency . '"]' => ['checked' => TRUE],
       ];
     }
   }

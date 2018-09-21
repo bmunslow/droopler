@@ -8,7 +8,7 @@ namespace Drupal\droopler\Plugin\Droopler\OptionalModule;
  * @DrooplerOptionalModule(
  *   id = "d_blog_init",
  *   label = @Translation("Enable Blog init"),
- *   type = "module",
+ *   type = "submodule",
  *   dependencies = {
  *    "d_blog",
  *   },

@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * @file
+ * d_simple_content_init module.
+ */
+
+/**
+ * Alter content structure.
+ *
+ * Implements hook_content_structure_alter().
+ *
+ * @param array $structure
+ *   The array with structure.
+ */
+function d_simple_content_init_content_structure_alter(array &$structure) {
+  // Set default structure.
+  $path = drupal_get_path('module', 'd_simple_content_init') . '/pages';
+  $structure = [
+    'homepage' => [
+      'file' => "$path/homepage.yml",
+      'link' => 'Home',
+      'weight' => 10
+    ],
+  ];
+}

@@ -41,9 +41,6 @@ function droopler_install() {
     ->set('page.front', '/node/1')
     ->save();
 
-  // Install init content. It will add an install task to be performed later.
-  \Drupal::service('module_installer')->install(['d_content_init']);
-
   // If subtheme is available install the blog.
   // @TODO this should not really be here because this subtheme is not part of the distribution
   if (isset($themes['droopler_subtheme'])) {

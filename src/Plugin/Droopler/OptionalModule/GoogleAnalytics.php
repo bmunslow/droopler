@@ -11,7 +11,7 @@ use Drupal\Core\Url;
  * @DrooplerOptionalModule(
  *   id = "google_analytics",
  *   label = @Translation("Google Analytics"),
- *   description = @Translation("Google Analytics lets you measure your advertising ROI as well as track your video, and social networking sites and applications."),
+ *   description = @Translation("Enter the ID to enable and pre-configure Google Analytics on your existing website."),
  *   type = "module",
  *   exclusions = {
  *    "google_tag",

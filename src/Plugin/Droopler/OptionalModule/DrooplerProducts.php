@@ -3,7 +3,7 @@
 namespace Drupal\droopler\Plugin\Droopler\OptionalModule;
 
 /**
- * Droopler blog.
+ * Droopler products.
  *
  * @DrooplerOptionalModule(
  *   id = "d_products",
